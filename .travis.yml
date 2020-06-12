@@ -60,6 +60,10 @@ install:
 script:
   # - pytest test/test_hub.py
   - make build
+  - |
+    if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+      make push
+    fi
 
 after_success:
   # Necessary to run coverage combine to rewrite paths from
