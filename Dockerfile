@@ -1,6 +1,7 @@
 FROM pytorch/pytorch
 
-RUN mkdir -p /opt/image-classifier
+RUN mkdir -p /opt/image-classifier/.cache
+ENV HOME=/opt/image-classifier
 WORKDIR /opt/image-classifier
 ADD . /opt/image-classifier
 
@@ -14,10 +15,10 @@ RUN apt-get update \
 RUN ln -s /usr/bin/python3 /usr/local/bin/python && \
     ln -s /usr/bin/pip3 /usr/local/bin/pip
 
+RUN pip install -r requirements.txt
+
 RUN chgrp -R 0 /opt/image-classifier \
   && chmod -R g+rwX /opt/image-classifier
-
-RUN pip install -r requirements.txt
 
 EXPOSE 5000
 
