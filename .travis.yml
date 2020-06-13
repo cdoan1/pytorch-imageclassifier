@@ -9,31 +9,31 @@ branches:
     - master
     - "/^release-[0-9]+\\..*$/"
 
-before_install:
-  - sudo apt-get update
-  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
-  - bash miniconda.sh -b -p $HOME/miniconda
-  - export PATH="$HOME/miniconda/bin:$PATH"
-  - hash -r
-  - conda config --set always_yes yes --set changeps1 no
-  # Useful for debugging any issues with conda
-  - conda info -a
+# before_install:
+#   - sudo apt-get update
+#   - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+#   - bash miniconda.sh -b -p $HOME/miniconda
+#   - export PATH="$HOME/miniconda/bin:$PATH"
+#   - hash -r
+#   - conda config --set always_yes yes --set changeps1 no
+#   # Useful for debugging any issues with conda
+#   - conda info -a
 
-  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION pytorch scipy -c pytorch-nightly
-  - source activate test-environment
-  - |
-    if [[ "$IMAGE_BACKEND" == "Pillow-SIMD" ]]; then
-      pip uninstall -y pillow && CC="cc -march=native" pip install --force-reinstall pillow-simd
-    fi
-  - pip install future
-  - pip install pytest pytest-cov codecov
-  - pip install typing
-  - |
-    if [[ $TRAVIS_PYTHON_VERSION == 3.6 ]]; then
-      pip install -q --user typing-extensions==3.6.6
-      pip install -q --user -i https://test.pypi.org/simple/ ort-nightly==1.3.0.dev202005123
-    fi
-  - conda install av -c conda-forge
+#   - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION pytorch scipy -c pytorch-nightly
+#   - source activate test-environment
+#   - |
+#     if [[ "$IMAGE_BACKEND" == "Pillow-SIMD" ]]; then
+#       pip uninstall -y pillow && CC="cc -march=native" pip install --force-reinstall pillow-simd
+#     fi
+#   - pip install future
+#   - pip install pytest pytest-cov codecov
+#   - pip install typing
+#   - |
+#     if [[ $TRAVIS_PYTHON_VERSION == 3.6 ]]; then
+#       pip install -q --user typing-extensions==3.6.6
+#       pip install -q --user -i https://test.pypi.org/simple/ ort-nightly==1.3.0.dev202005123
+#     fi
+#   - conda install av -c conda-forge
 
 
 install:
@@ -50,7 +50,7 @@ install:
   #   export TV_INSTALL_PATH="$(python -c 'import os; import torchvision; print(os.path.dirname(os.path.abspath(torchvision.__file__)))')"
   #   echo "$TV_INSTALL_PATH"
   #   cd -
-  - wget https://github.com/raghakot/keras-vis/blob/master/resources/imagenet_class_index.json
+  - make imagenet
 
 after_success:
   # Necessary to run coverage combine to rewrite paths from
