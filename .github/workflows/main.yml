@@ -7,8 +7,8 @@ name: CI
 on:
   check_suite:
     type: ['completed']
-  push:
-    branches: [ master ]
+  # push:
+  #   branches: [ master ]
   pull_request:
     branches: [ master ]
 
@@ -16,10 +16,8 @@ on:
 jobs:
   continue:
     name: After Travis CI
-    if: github.event.check_suite.app.name == 'Travis CI' && github.event.check_suite.conclusion == 'success'
+    if: github.event.check_suite.app.name == 'Travis CI' &&  github.event.check_suite.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
-    - name: Continue	
-      run: echo "Hello after Cirrus CI Completed"on:
-  check_suite:
-    type: ['completed']
+    - name: Continue
+      run: echo "Hello after Cirrus CI Completed"

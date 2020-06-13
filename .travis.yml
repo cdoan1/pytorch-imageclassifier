@@ -48,13 +48,12 @@ jobs:
     - stage: build
       name: build
       python: "3.6"
-      env: IMAGE_BACKEND=Pillow-SIMD
+      # env: IMAGE_BACKEND=Pillow-SIMD
       script: |
         make build
-    - name: build
-      python: "3.6"
-      script: |
-        make build
+        make run
+        sleep 10
+        make test
     - stage: push
       name: push
       if: type = push AND branch =~ /^master$/
