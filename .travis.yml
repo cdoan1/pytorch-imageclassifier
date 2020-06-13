@@ -79,4 +79,5 @@ jobs:
       name: push
       if: type = push AND branch =~ /^master$/
       script: |
+        make build
         make push
