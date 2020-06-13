@@ -3,11 +3,6 @@ language: python
 service: docker
 
 dist: xenial
-matrix:
-  include:
-    - python: "3.6"
-      env: IMAGE_BACKEND=Pillow-SIMD
-    - python: "3.6"
 
 branches:
   only:
@@ -57,17 +52,31 @@ install:
   #   cd -
   - wget https://github.com/raghakot/keras-vis/blob/master/resources/imagenet_class_index.json
 
-script:
-  # - pytest test/test_hub.py
-  - make build
-  - |
-    if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-      make push
-    fi
-
 after_success:
   # Necessary to run coverage combine to rewrite paths from
   # /travis/env/path/site-packages/torchvision to actual path
   - coverage combine .coverage
   - coverage report
   - codecov
+
+stages:
+  - build
+  - push
+
+jobs:
+  include:
+    - stage: build
+      name: build
+      python: "3.6"
+      env: IMAGE_BACKEND=Pillow-SIMD
+      script: |
+        make build
+    - name: build
+      python: "3.6"
+      script: |
+        make build
+    - stage: push
+      name: push
+      if: type = push AND branch =~ /^master$/
+      script: |
+        make push
