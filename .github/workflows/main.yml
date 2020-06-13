@@ -1,0 +1,25 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  check_suite:
+    type: ['completed']
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  continue:
+    name: After Travis CI
+    if: github.event.check_suite.app.name == 'Travis CI' && github.event.check_suite.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Continue	
+      run: echo "Hello after Cirrus CI Completed"on:
+  check_suite:
+    type: ['completed']
